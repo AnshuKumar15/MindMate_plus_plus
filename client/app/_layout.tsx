@@ -11,7 +11,7 @@ import { Platform, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AudioPlayerProvider } from "@/components/AudioPlayerProvider";
 import DraggableMiniPlayer from "@/components/DraggableMiniPlayer";
-import "@/i18n/config";
+import { setAppLanguage } from "@/i18n/config";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
@@ -48,8 +48,7 @@ export default function RootLayout() {
               const data = await res.json();
               // Set user language preference
               if (data?.user?.language) {
-                const { changeLanguage } = await import("@/i18n/config");
-                changeLanguage(data.user.language);
+                setAppLanguage(data.user.language);
               }
               setIsAuthed(true);
             } else {

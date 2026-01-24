@@ -13,7 +13,7 @@ import {
   Linking,
   Platform,
   ToastAndroid,
-}from "react-native";
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
 import { useRouter } from "expo-router";
@@ -36,14 +36,14 @@ export default function PrepareExamScreen() {
     "subject" | "materials" | "datesheets"
   >("subject");
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  
+
   // New planning parameters
   const [dailyStartTime, setDailyStartTime] = useState("09:00");
   const [dailyEndTime, setDailyEndTime] = useState("17:00");
   const [numDays, setNumDays] = useState("30");
   const [startDate, setStartDate] = useState(() => {
     const today = new Date();
-    return today.toISOString().split('T')[0];
+    return today.toISOString().split("T")[0];
   });
 
   const baseUrl = useMemo(
@@ -295,7 +295,10 @@ export default function PrepareExamScreen() {
       // Build subject list from current subjects
       const subjectList = subjects.map((s) => s.name).filter(Boolean);
       if (subjectList.length === 0) {
-        Alert.alert("Error", "Please add at least one subject before planning.");
+        Alert.alert(
+          "Error",
+          "Please add at least one subject before planning."
+        );
         return;
       }
 
@@ -305,17 +308,17 @@ export default function PrepareExamScreen() {
         Alert.alert("Error", "Please enter valid time format (HH:MM)");
         return;
       }
-      
+
       // Validate number of days
       const days = parseInt(numDays, 10);
       if (isNaN(days) || days < 1) {
         Alert.alert("Error", "Number of days must be at least 1");
         return;
       }
-      
+
       // Always use today's date for planning start
       const startDateToUse = new Date().toISOString().split("T")[0];
-      
+
       // Get datesheet path if available
       let datesheetPath = "";
       try {
@@ -327,7 +330,7 @@ export default function PrepareExamScreen() {
           datesheetPath = datesheets[0].url || "";
         }
       } catch {}
-      
+
       const res = await fetch(`${baseUrl}/api/planner/plan`, {
         method: "POST",
         headers: {
@@ -343,7 +346,7 @@ export default function PrepareExamScreen() {
           datesheetPath: datesheetPath || undefined,
         }),
       });
-      
+
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
         throw new Error(errorData.message || "Failed to create plan");
@@ -387,10 +390,15 @@ export default function PrepareExamScreen() {
         ListHeaderComponent={
           <View>
             <Text style={styles.sectionTitle}>Create Study Plan</Text>
-            
+
             <View style={styles.row}>
               <View style={{ flex: 1 }}>
-                <Text style={[styles.sectionTitle, { marginTop: 12, fontSize: 14, fontWeight: '600' }]}>
+                <Text
+                  style={[
+                    styles.sectionTitle,
+                    { marginTop: 12, fontSize: 14, fontWeight: "600" },
+                  ]}
+                >
                   Daily Start Time (HH:MM)
                 </Text>
                 <TextInput
@@ -401,7 +409,12 @@ export default function PrepareExamScreen() {
                 />
               </View>
               <View style={{ flex: 1, marginLeft: 8 }}>
-                <Text style={[styles.sectionTitle, { marginTop: 12, fontSize: 14, fontWeight: '600' }]}>
+                <Text
+                  style={[
+                    styles.sectionTitle,
+                    { marginTop: 12, fontSize: 14, fontWeight: "600" },
+                  ]}
+                >
                   Daily End Time (HH:MM)
                 </Text>
                 <TextInput
@@ -412,22 +425,34 @@ export default function PrepareExamScreen() {
                 />
               </View>
             </View>
-            
+
             <View style={styles.row}>
               <View style={{ flex: 1 }}>
-                <Text style={[styles.sectionTitle, { marginTop: 12, fontSize: 14, fontWeight: '600' }]}>
+                <Text
+                  style={[
+                    styles.sectionTitle,
+                    { marginTop: 12, fontSize: 14, fontWeight: "600" },
+                  ]}
+                >
                   Number of Days
                 </Text>
                 <TextInput
                   placeholder="30"
                   value={numDays}
-                  onChangeText={(text) => setNumDays(text.replace(/[^0-9]/g, ''))}
+                  onChangeText={(text) =>
+                    setNumDays(text.replace(/[^0-9]/g, ""))
+                  }
                   keyboardType="number-pad"
                   style={styles.input}
                 />
               </View>
               <View style={{ flex: 1, marginLeft: 8 }}>
-                <Text style={[styles.sectionTitle, { marginTop: 12, fontSize: 14, fontWeight: '600' }]}>
+                <Text
+                  style={[
+                    styles.sectionTitle,
+                    { marginTop: 12, fontSize: 14, fontWeight: "600" },
+                  ]}
+                >
                   Start Date (YYYY-MM-DD)
                 </Text>
                 <TextInput
@@ -438,8 +463,13 @@ export default function PrepareExamScreen() {
                 />
               </View>
             </View>
-            
-            <Text style={[styles.sectionTitle, { marginTop: 16, fontSize: 14, fontWeight: '600' }]}>
+
+            <Text
+              style={[
+                styles.sectionTitle,
+                { marginTop: 16, fontSize: 14, fontWeight: "600" },
+              ]}
+            >
               Exam Datesheet (optional)
             </Text>
             <TouchableOpacity
@@ -457,7 +487,7 @@ export default function PrepareExamScreen() {
             >
               <Text style={styles.viewBtnText}>View Date Sheets</Text>
             </TouchableOpacity>
-            
+
             <Text style={[styles.sectionTitle, { marginTop: 24 }]}>
               Manage Subjects (for file organization)
             </Text>
